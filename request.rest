@@ -1,0 +1,40 @@
+GET http://localhost:3000/api/usuarios
+
+###
+
+POST  http://localhost:3000/api/usuarios
+
+{
+    "nombre": "vinicio",
+    "correo" : "vinicio@gmail.com",
+    "password":"Cirilo.10",
+    "rol" : "USER_ROLE"
+}
+
+
+GET http://localhost:3000/api/usuarios?limite=2
+
+### 
+#-------------------Login-------------------#
+#Es postman si funciona
+POST http://localhost:3000/api/auth/login
+
+{
+    "correo": "vinicio@gmail.com",
+    "password": "Cirilo.10"
+}
+
+#https://rest-sertver-4-vinicio.herokuapp.com/api/usuarios
+###
+#Google Sign in
+POST http://localhost:8080/api/auth/google
+
+{
+    "id_token": "asdad848"
+}
+
+#Categoria
+### 
+#-------------------Categoria-------------------#
+GET http://localhost:8080/api/categorias
+

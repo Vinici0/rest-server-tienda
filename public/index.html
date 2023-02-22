@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Parciones HTTP</title>
+  </head>
+  <body>
+    <h1>GOOGLE SING</h1>
+    <hr />
+    <div
+      id="g_id_onload"
+      data-client_id="1056852585466-kfqsbcgp9s9jkfmpr8e9nl0r18d06fue.apps.googleusercontent.com"
+      data-auto_prompt="false"
+      data-callback="handleCredentialResponse"
+    ></div>
+    <div
+      class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left"
+    ></div>
+
+    <button id="google-cerrar">Cerrar Session.</button>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script>
+      function handleCredentialResponse(response) {
+        //Google token: id_token
+        //console.log("Id Token: ", response.credential);
+
+        const body = {
+          id_token: response.credential,
+        };
+        //http://localhost:8080/api/auth/google
+
+        fetch("https://rest-sertver-4-vinicio.herokuapp.com/api/auth/google", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            localStorage.setItem("correo", data.usuario.correo); // Se guarda el correo en el localstorage
+          })
+          .catch((err) => console.log(err));
+      }
+
+      const googleCerrar = document.getElementById("google-cerrar");
+
+      googleCerrar.addEventListener("click", () => {
+        console.log(google.accounts.id);
+        google.accounts.id.disableAutoSelect();
+        google.accounts.id.revoke(localStorage.getItem("correo"), (done) => {
+          console.log("consent revoked");
+          localStorage.clear();// Se limpia el localstorage
+          location.reload();// Se recarga la pagina para que se muestre el boton de google
+        });
+      });
+    </script>
+  </body>
+</html>
