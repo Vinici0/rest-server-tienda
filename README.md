@@ -1,6 +1,6 @@
 
 
-# Proyecto en React para Rest Server
+# Proyecto en NodeJS
 
 Este proyecto de Rest Server se encarga de crear un servidor que puede recibir peticiones HTTP y responder a ellas. Se utilizan diversas tecnologías y librerías para lograrlo, incluyendo NodeJS, Express, Cors, Dotenv, Mongoose y BcryptJS.
 
