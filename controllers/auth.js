@@ -9,7 +9,6 @@ const login = async (req, res = response) => {
   const { correo, password } = req.body;
 
   try {
-    //Verificar si el email existe
     const usuario = await Usuario.findOne({ correo });
     if (!usuario) {
       return res.status(400).json({
@@ -17,21 +16,19 @@ const login = async (req, res = response) => {
       });
     }
 
-    //Si el usuario esta activo
     if (!usuario.estado) {
       return res.status(400).json({
         msg: "Usuario / Password no son correctos - estado: false",
       });
     }
 
-    //Verificar la contraseña
-    const validPassword = bycryptjs.compareSync(password, usuario.password); //Lo hace de forma sincrona
+    const validPassword = bycryptjs.compareSync(password, usuario.password); 
     if (!validPassword) {
       return res.status(400).json({
         msg: "Usuario / Password no son correctos - password",
       });
     }
-    //Generar el JWT
+    
     const token = await generarJWT(usuario.id);
 
     res.json({
@@ -47,7 +44,6 @@ const login = async (req, res = response) => {
   }
 };
 
-//response solo es para que ayude con el autocompletado
 const googleSignIn = async (req, res = response) => {
   const { id_token } = req.body;
 
@@ -56,10 +52,8 @@ const googleSignIn = async (req, res = response) => {
 
     const {correo,nombre,img} = await verifyGoogle(id_token)
 
-    //Verificar si el correo existe
     let usuario = await Usuario.findOne({correo})
     if(!usuario){
-      //Tengo que crearlo
       const data = {
         nombre,
         correo,
@@ -73,14 +67,12 @@ const googleSignIn = async (req, res = response) => {
       await usuario.save()
     }
 
-    //Si el usuario en DB
     if(!usuario.estado){
       return res.status(401).json({
         msg:'Hable con el administrador, usuario bloqueado'
       })
     }
 
-    //Generar el JWT
     const token = await generarJWT(usuario.id);
     console.log(token);
 
