@@ -6,8 +6,7 @@ const { Usuario, Categoria, Producto } = require("../models");
 const coleccionesPermitidas = ["usuarios", "categorias", "productos", "roles"];
 
 const buscarUsuarios = async (termino = "", res = response) => {
-  // Comprobar si es un ID de mongo válido
-  const esMongoID = ObjectId.isValid(termino); // TRUE
+  const esMongoID = ObjectId.isValid(termino); /
 
   if (esMongoID) {
     const usuario = await Usuario.findById(termino);
@@ -16,11 +15,10 @@ const buscarUsuarios = async (termino = "", res = response) => {
     });
   }
 
-  //Expresión regular para hacer la búsqueda insensible a mayúsculas y minúsculas y que sea global
-  const regex = new RegExp(termino, "i");// i -> insensible a mayúsculas y minúsculas
-  const usuarios = await Usuario.find({//count
-    $or: [{ nombre: regex }, { correo: regex }],// Para buscar por nombre o correo
-    $and: [{ estado: true }],// Para buscar solo los usuarios activos
+  const regex = new RegExp(termino, "i");
+  const usuarios = await Usuario.find({
+    $or: [{ nombre: regex }, { correo: regex }],
+    $and: [{ estado: true }],
   });
 
   res.json({
