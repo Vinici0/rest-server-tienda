@@ -1,7 +1,6 @@
 const { response, request } = require("express");
 const {Categoria} = require("../models");
 
-//Obtener categorias - paginado - total - populate -> para el nombre de usuario
 const obtenerCategorias =  async (req = request, res = response) => {
   const query = { estado: true };
 
@@ -22,13 +21,11 @@ const obtenerCategorias =  async (req = request, res = response) => {
 
 }
 
-//Obtener categoria - populate -> solo el objeto de la categoria
 const obtenerCategoria = async (req = request, res = response) => {
   const {id} = req.params;
   console.log(id);
 
   try {
-    //Verificar si el email existe
     const categoria = await Categoria.findById(id);
     console.log(categoria);
   
@@ -47,20 +44,16 @@ const obtenerCategoria = async (req = request, res = response) => {
 
 const crearCategoria = async (req = request, res = response) => {
 
-  // Convertimos a mayúsculas
   const nombre = req.body.nombre.toUpperCase();
 
-  // Buscamos si existe una categoría con el mismo nombre 
   const categoriaDB = await Categoria.findOne({ nombre }).populate("usuario", "nombre");
 
-  // Si no existe la categoría la creamos 
-  if (categoriaDB) {//!categoriaDB -> Si no existe la categoría la creamos
+  if (categoriaDB) {
     return res.status(400).json({
       msg: `La categoria ${categoriaDB.nombre}, ya existe`,
     });
   }
 
-  // Generar la data a guardar
   const data = {
     nombre,
     usuario: req.usuario._id,
@@ -68,13 +61,10 @@ const crearCategoria = async (req = request, res = response) => {
 
   const categoria = new Categoria(data);
 
-  // Guardar DB
   await categoria.save();
 
   res.status(201).json(categoria);
 };
-
-// actualizar categoria -> solo debe recibir el nombre
 
 const categoriaPut = async (req, res) => {
   const { id } = req.params;
@@ -89,14 +79,10 @@ const categoriaPut = async (req, res) => {
 
 const categoriaDelete = async (req, res) => {
   const { id } = req.params;
-
   const categoria = await Categoria.findByIdAndUpdate(id, { estado: false }).populate("usuario", "nombre");
-
+  
   res.json({categoria});
 };
-
-//borrarCategoria - estado: false
-
 
 module.exports = {
   crearCategoria,
