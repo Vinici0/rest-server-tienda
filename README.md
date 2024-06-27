@@ -20,6 +20,7 @@ npm install bcryptjs
 npm install express-validator
 npm install jsonwebtoken
 ```
+
 ## Variables de entorno
 Es importante especificar las variables de entorno que se utilizarán en el proyecto, incluyendo <b>MONGODB_AUTH y GOOGLE_CLIENT_ID</b>. Para ver las variables de entorno en Heroku, utiliza el comando heroku config.
 
